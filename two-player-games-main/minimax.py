@@ -51,11 +51,6 @@ import copy
 import random
 
 
-def argmax(x):
-    return max(range(len(x)), key=lambda i: x[i])
-
-def argmin(x):
-    return min(range(len(x)), key=lambda i: x[i])
 """Wielkość planszy"""
 
 ROW_COUNT = 6
@@ -74,93 +69,93 @@ class MinMaxSolver:
         for column_id in range(len(self.state.fields)):  # verticals
             for start_row_id in range(len(self.state.fields[column_id])):
                 try:
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == player:
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == player and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == None):
                         heuristic += 10
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == player:
-                        heuristic += 100
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == player and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 3][start_row_id] == None):
+                        heuristic += 1000
                     if self.state.fields[column_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == self.state.fields[column_id + 3][start_row_id] == player:
-                        heuristic += 10000
+                        heuristic += 100000
                 except IndexError:
                     pass
         for start_column_id in range(len(self.state.fields)):  # horizontals
             for row_id in range(len(self.state.fields[start_column_id])):
                 try:
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == player:
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == player and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == None):
                         heuristic += 10
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == player:
-                        heuristic += 100
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == player and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 3] == None):
+                        heuristic += 1000
                     if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == self.state.fields[start_column_id][row_id + 3] == player:
-                        heuristic += 10000
+                        heuristic += 100000
                 except IndexError:
                     pass
         for start_column_id in range(len(self.state.fields)):  # diagonals positive
             for start_row_id in range(len(self.state.fields[start_column_id])):
-                if start_row_id + 3 <= len(self.state.fields[start_column_id]):
+                if start_row_id + 3 <= len(self.state.fields[start_column_id]) and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == player:
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == player and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == None):
                             heuristic += 10
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == player:
-                            heuristic += 100
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == player and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 3][start_row_id + 3] == None):
+                            heuristic += 1000
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == self.state.fields[start_column_id + 3][start_row_id + 3] == player:
-                            heuristic += 10000
+                            heuristic += 100000
                     except IndexError:
                         pass
         for start_column_id in range(len(self.state.fields)):  # diagonals negative
             for start_row_id in range(len(self.state.fields[start_column_id])):
-                if start_row_id - 3 >= 0:
+                if start_row_id - 3 >= 0 and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == player:
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == player and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == None):
                             heuristic += 10
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == player:
-                            heuristic += 100
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == player and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 3][start_row_id - 3] == None):
+                            heuristic += 1000
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == self.state.fields[start_column_id + 3][start_row_id - 3] == player:
-                            heuristic += 10000
+                            heuristic += 100000
                     except IndexError:
                         pass
         for column_id in range(len(self.state.fields)):  # verticals
             for start_row_id in range(len(self.state.fields[column_id])):
                 try:
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == other:
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == other and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == None):
                         heuristic -= 10
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == other:
-                        heuristic -= 100
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == other and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 3][start_row_id] == None):
+                        heuristic -= 1000
                     if self.state.fields[column_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == self.state.fields[column_id + 3][start_row_id] == other:
-                        heuristic -= 10000
+                        heuristic -= 100000
                 except IndexError:
                     pass
         for start_column_id in range(len(self.state.fields)):  # horizontals
             for row_id in range(len(self.state.fields[start_column_id])):
                 try:
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == other:
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == other and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == None):
                         heuristic -= 10
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == other:
-                        heuristic -= 100
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == other and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 3] == None):
+                        heuristic -= 1000
                     if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == self.state.fields[start_column_id][row_id + 3] == other:
-                        heuristic -= 10000
+                        heuristic -= 100000
                 except IndexError:
                     pass
         for start_column_id in range(len(self.state.fields)):  # diagonals positive
             for start_row_id in range(len(self.state.fields[start_column_id])):
-                if start_row_id + 3 <= len(self.state.fields[start_column_id]):
+                if start_row_id + 3 <= len(self.state.fields[start_column_id]) and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == other:
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == other and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == None):
                             heuristic -= 10
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == other:
-                            heuristic -= 100
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == other and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 3][start_row_id + 3] == None):
+                            heuristic -= 1000
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == self.state.fields[start_column_id + 3][start_row_id + 3] == other:
-                            heuristic -= 10000
+                            heuristic -= 100000
                     except IndexError:
                         pass
         for start_column_id in range(len(self.state.fields)):  # diagonals negative
             for start_row_id in range(len(self.state.fields[start_column_id])):
-                if start_row_id - 3 >= 0:
+                if start_row_id - 3 >= 0 and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == other:
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == other and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == None):
                             heuristic -= 10
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == other:
-                            heuristic -= 100
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == other and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 3][start_row_id - 3] == None):
+                            heuristic -= 1000
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == self.state.fields[start_column_id + 3][start_row_id - 3] == other:
-                            heuristic -= 10000
+                            heuristic -= 100000
                     except IndexError:
                         pass
         return heuristic
@@ -176,9 +171,8 @@ class MinMaxSolver:
 
         
     def minimax(self, game, depth, alpha:float, beta:float, is_maximizing_player:bool)-> Tuple[int, float]:
-        # if depth == 0 or node is terminal
-        # sprobuj na stateach
         if depth == 0 or len(self._get_valid_locations()) == 0:
+            # return None, self.evaluate_position(self.state._current_player, self.state._other_player)
             if is_maximizing_player:
                 return None, self.evaluate_position(self.state._current_player, self.state._other_player)
             else:
@@ -202,8 +196,8 @@ class MinMaxSolver:
                 alpha = max(alpha, best_score)
                 if alpha >= beta:
                     break
-            best_move = random.choice(best_moves)
-            return best_move, best_score
+            chosen_move = random.choice(best_moves)
+            return chosen_move, best_score
         else:
             best_score = math.inf
             best_moves = []
@@ -223,8 +217,8 @@ class MinMaxSolver:
                 beta = min(beta, best_score)
                 if alpha >= beta:
                     break
-            best_move = random.choice(best_moves)
-            return best_move, best_score
+            chosen_move = random.choice(best_moves)
+            return chosen_move, best_score
         
         
 
@@ -262,10 +256,11 @@ def main():
     print(game)
     strategy = MinMaxSolver(game)
     while game.is_finished() is False:
-        if game.state._current_player == game.second_player:
-            game.make_move(strategy.get_best_move(game, 3, False))
-        if game.state._current_player == game.first_player:
-            game.make_move(strategy.get_best_move(game, 3, True))
+        current_player = game.state.get_current_player()
+        if current_player.char == game.second_player.char:
+            game.make_move(strategy.get_best_move(game, 4, False))
+        if current_player.char == game.first_player.char:
+            game.make_move(strategy.get_best_move(game, 4, True))
     
             
         print(game)
