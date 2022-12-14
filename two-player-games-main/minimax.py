@@ -69,7 +69,7 @@ class MinMaxSolver:
         for column_id in range(len(self.state.fields)):  # verticals
             for start_row_id in range(len(self.state.fields[column_id])):
                 try:
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == player and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == None):
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == player and (self.state.fields[column_id - 2][start_row_id] == self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == self.state.fields[column_id + 3][start_row_id] == None):
                         heuristic += 10
                     if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == player and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 3][start_row_id] == None):
                         heuristic += 1000
@@ -80,7 +80,7 @@ class MinMaxSolver:
         for start_column_id in range(len(self.state.fields)):  # horizontals
             for row_id in range(len(self.state.fields[start_column_id])):
                 try:
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == player and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == None):
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == player and (self.state.fields[column_id][start_row_id - 2] == self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == self.state.fields[column_id][start_row_id + 3] == None):
                         heuristic += 10
                     if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == player and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 3] == None):
                         heuristic += 1000
@@ -92,7 +92,7 @@ class MinMaxSolver:
             for start_row_id in range(len(self.state.fields[start_column_id])):
                 if start_row_id + 3 <= len(self.state.fields[start_column_id]) and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == player and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == None):
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == player and (self.state.fields[column_id - 2][start_row_id - 2] == self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == self.state.fields[column_id + 3][start_row_id + 3] == None):
                             heuristic += 10
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == player and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 3][start_row_id + 3] == None):
                             heuristic += 1000
@@ -104,7 +104,7 @@ class MinMaxSolver:
             for start_row_id in range(len(self.state.fields[start_column_id])):
                 if start_row_id - 3 >= 0 and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == player and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == None):
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == player and (self.state.fields[column_id - 2][start_row_id + 2] == self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == self.state.fields[column_id + 3][start_row_id - 3] == None):
                             heuristic += 10
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == player and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 3][start_row_id - 3] == None):
                             heuristic += 1000
@@ -115,7 +115,7 @@ class MinMaxSolver:
         for column_id in range(len(self.state.fields)):  # verticals
             for start_row_id in range(len(self.state.fields[column_id])):
                 try:
-                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == other and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == None):
+                    if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == other and (self.state.fields[column_id - 2][start_row_id] == self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 2][start_row_id] == self.state.fields[column_id + 3][start_row_id] == None):
                         heuristic -= 10
                     if self.state.fields[column_id][start_row_id] == self.state.fields[column_id + 1][start_row_id] == self.state.fields[column_id + 2][start_row_id] == other and (self.state.fields[column_id - 1][start_row_id] == None or self.state.fields[column_id + 3][start_row_id] == None):
                         heuristic -= 1000
@@ -126,7 +126,7 @@ class MinMaxSolver:
         for start_column_id in range(len(self.state.fields)):  # horizontals
             for row_id in range(len(self.state.fields[start_column_id])):
                 try:
-                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == other and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == None):
+                    if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == other and (self.state.fields[column_id][start_row_id - 2] == self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 2] == self.state.fields[column_id][start_row_id + 3] == None):
                         heuristic -= 10
                     if self.state.fields[start_column_id][row_id] == self.state.fields[start_column_id][row_id + 1] == self.state.fields[start_column_id][row_id + 2] == other and (self.state.fields[column_id][start_row_id - 1] == None or self.state.fields[column_id][start_row_id + 3] == None):
                         heuristic -= 1000
@@ -138,7 +138,7 @@ class MinMaxSolver:
             for start_row_id in range(len(self.state.fields[start_column_id])):
                 if start_row_id + 3 <= len(self.state.fields[start_column_id]) and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == other and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == None):
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == other and (self.state.fields[column_id - 2][start_row_id - 2] == self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 2][start_row_id + 2] == self.state.fields[column_id + 3][start_row_id + 3] == None):
                             heuristic -= 10
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id + 1] == self.state.fields[start_column_id + 2][start_row_id + 2] == other and (self.state.fields[column_id - 1][start_row_id - 1] == None or self.state.fields[column_id + 3][start_row_id + 3] == None):
                             heuristic -= 1000
@@ -150,7 +150,7 @@ class MinMaxSolver:
             for start_row_id in range(len(self.state.fields[start_column_id])):
                 if start_row_id - 3 >= 0 and start_column_id + 3 <= len(self.state.fields):
                     try:
-                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == other and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == None):
+                        if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == other and (self.state.fields[column_id - 2][start_row_id + 2] == self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 2][start_row_id - 2] == self.state.fields[column_id + 3][start_row_id - 3] == None):
                             heuristic -= 10
                         if self.state.fields[start_column_id][start_row_id] == self.state.fields[start_column_id + 1][start_row_id - 1] == self.state.fields[start_column_id + 2][start_row_id - 2] == other and (self.state.fields[column_id - 1][start_row_id + 1] == None or self.state.fields[column_id + 3][start_row_id - 3] == None):
                             heuristic -= 1000
@@ -170,7 +170,7 @@ class MinMaxSolver:
     #         return self.minimax(node, depth, -math.inf, math.inf, False)
 
         
-    def minimax(self, game, depth, alpha:float, beta:float, is_maximizing_player:bool)-> Tuple[int, float]:
+    def minimax(self,game, depth, alpha:float, beta:float, is_maximizing_player:bool)-> Tuple[int, float]:
         if depth == 0 or len(self._get_valid_locations()) == 0:
             # return None, self.evaluate_position(self.state._current_player, self.state._other_player)
             if is_maximizing_player:
@@ -182,7 +182,7 @@ class MinMaxSolver:
             best_moves = []
             best_move = None
             for location in self._get_valid_locations():
-                temp_game = copy.deepcopy(self.game)
+                temp_game = copy.deepcopy(self.game.state)
                 move = ConnectFourMove(location)
                 temp_game.make_move(move)
                 tmp_move, evaluation = self.minimax(temp_game, depth-1, alpha, beta, is_maximizing_player)
@@ -203,7 +203,7 @@ class MinMaxSolver:
             best_moves = []
             best_move = None
             for location in self._get_valid_locations():
-                temp_game = copy.deepcopy(self.game)
+                temp_game = copy.deepcopy(self.game.state)
                 move = ConnectFourMove(location)
                 temp_game.make_move(move)
                 tmp_move, evaluation = self.minimax(temp_game, depth-1, alpha, beta, is_maximizing_player)
@@ -249,6 +249,8 @@ class MinMaxSolver:
             if row_val is None:
                 return True
         return False
+
+
 def main():
     p1 = Player("a")
     p2 = Player("b")

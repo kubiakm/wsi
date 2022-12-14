@@ -12,7 +12,7 @@ y = iris.target
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state=123)
 
 def entropy_func(class_count, num_samples):
-    pass
+    return sum([-class_count/num_samples* math.log(class_count/num_samples, 2) if class_count else 0])
 
 
 class Group:
@@ -24,7 +24,7 @@ class Group:
         return self.group_classes.size
 
     def group_entropy(self):
-        pass
+        return entropy_func(self.group_classes, self.__len__)
 
 
 class Node:
