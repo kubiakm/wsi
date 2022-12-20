@@ -78,7 +78,8 @@ class DecisionTreeClassifier(object):
         return information_gain
 
     # dzieli na lewą (a) i prawą (b) klasę względem jakieś wartości granicznej podziału, dzieli dane według tej wartości
-    # zwraca obiekty rodzica oraz lewego i prawego dziecka wraz danymi
+    # tworzy obiekty rodzica 
+    # zwraca uzyskaną informację oraz klasy lewego i prawego dziecka wraz danymi
     def get_left_right_split(self, data, feature_values, split_value, classes):
         a_classes = [classes[n] for n in range(len(classes)) if feature_values[n] <= split_value]
         b_classes = [classes[n] for n in range(len(classes)) if feature_values[n] > split_value]
