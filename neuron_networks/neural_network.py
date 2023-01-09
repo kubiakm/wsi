@@ -1,6 +1,9 @@
 from abc import abstractmethod, ABC
 from typing import List
 import numpy as np
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 class Layer(ABC):
     """Basic building block of the Neural Network"""
@@ -11,12 +14,12 @@ class Layer(ABC):
     @abstractmethod
     def forward(self, x:np.ndarray)->np.ndarray:
         """Forward propagation of x through layer"""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def backward(self, output_error_derivative) ->np.ndarray:
         """Backward propagation of output_error_derivative through layer"""
-        pass
+        raise NotImplementedError
 
     @property
     def learning_rate(self):
@@ -34,35 +37,44 @@ class FullyConnected(Layer):
         self.input_size = input_size
         self.output_size = output_size
         self.weights = np.random.uniform(-1, 1, (self.output_size, self.input_size))
+        self.bias = np.random.rand(1, output_size) - 0.5
 
     def forward(self, x:np.ndarray)->np.ndarray:
-        pass
+        self.input = x
+        self.output = np.dot(self.input, self.weights) + self.bias
+        return self.output
 
     def backward(self, output_error_derivative)->np.ndarray:
-        pass
+        input_error = np.dot(output_error_derivative, self.weights.T)
+        weights_error = np.dot(self.input.T, output_error_derivative)
+        self.weights -= self._learning_rate * weights_error
+        self.bias -= self._learning_rate * output_error_derivative
+        return input_error
 
 class Tanh(Layer):
     def __init__(self) -> None:
         super().__init__()
 
     def forward(self, x:np.ndarray)->np.ndarray:
-        pass
+        return np.tanh(x)
 
     def backward(self, output_error_derivative)->np.ndarray:
-        pass
+        return 1-np.tanh(output_error_derivative)**2
 
 class Loss:
     def __init__(self, loss_function:callable, loss_function_derivative:callable)->None:
         self.loss_function = loss_function
         self.loss_function_derivative = loss_function_derivative
 
-    def loss(self, x:np.ndarray)->np.ndarray:
+    def loss(self, y_true:np.ndarray, y_pred:np.ndarray)->np.ndarray:
         """Loss function for a particular x"""
-        pass
+        self.loss_function = np.mean(np.power(y_true-y_pred, 2))
+        return self.loss_function
 
-    def loss_derivative(self, x:np.ndarray, y:np.ndarray)->np.ndarray:
+    def loss_derivative(self, y_true:np.ndarray, y_pred:np.ndarray)->np.ndarray:
         """Loss function derivative for a particular x and y"""
-        pass
+        self.loss_derivative = 2*(y_pred - y_true)/y_true.size
+        return self.loss_function_derivative
 
 class Network:
     def __init__(self, layers:List[Layer], learning_rate:float)->None:
@@ -71,11 +83,20 @@ class Network:
 
     def compile(self, loss:Loss)->None:
         """Define the loss function and loss function derivative"""
-        pass
+        loss = Loss
+        self.loss = loss.loss_function
+        self.loss_derivative = loss.loss_function_derivative
 
     def __call__(self, x:np.ndarray) -> np.ndarray:
         """Forward propagation of x through all layers"""
-        pass
+        samples = len(x)
+        result = []
+        for i in range(samples):
+            output = x[i]
+            for layer in self.layers:
+                output = layer.forward(output)
+            result.append(output)
+        return result
 
     def fit(self,
             x_train:np.ndarray,
@@ -84,4 +105,19 @@ class Network:
             learning_rate:float,
             verbose:int=0)->None:
         """Fit the network to the training data"""
-        pass
+        samples = len(x_train)
+        for i in range(epochs):
+            err = 0
+            for j in range(samples):
+                output = x_train[j]
+                for layer in self.layers:
+                    output = layer.forward(output)
+                err += self.loss(y_train[j], output)
+
+                #backward propagation
+                error = self.loss_derivative(y_train[j], output)
+                for layer in reversed(self.layers):
+                    error = layer.backward(error, learning_rate)
+            err /= samples
+            print('epoch %d/%d   error=%f' % (i+1, epochs, err))
+    
